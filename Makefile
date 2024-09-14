@@ -1,13 +1,14 @@
 CARGO = cargo
 TARGET = target/release/clipsearch
-INSTALL_DIR = ~/.local/bin
+PREFIX ?= ~/.local
+INSTALL_DIR = $(PREFIX)/bin
 ASSETS_DIR = assets
 APP_NAME = clipsearch
 DESKTOP_FILE_TEMPLATE = ${ASSETS_DIR}/${APP_NAME}.desktop.template
 DESKTOP_FILE = ${ASSETS_DIR}/${APP_NAME}.desktop
-LOCAL_DESKTOP_DIR = ~/.local/share/applications
+LOCAL_DESKTOP_DIR = $(PREFIX)/share/applications
 ICON_PNG_256 = ${ASSETS_DIR}/clipsearch.png
-LOCAL_ICON_DIR_256 = ~/.local/share/icons/hicolor/256x256/apps
+LOCAL_ICON_DIR_256 = $(PREFIX)/share/icons/hicolor/256x256/apps
 VERSION=$(shell grep '^version =' Cargo.toml | sed 's/version = "\(.*\)"/\1/')
 
 .PHONY: all clean install uninstall
