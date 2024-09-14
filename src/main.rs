@@ -266,7 +266,7 @@ fn send_update(socket_path: PathBuf, message: SocketMessage) -> Result<(), anyho
         // Flush the socket to ensure the data is sent
         socket.flush()
     }) {
-        eprint!("Failed to send update to socket: {}", e);
+        eprintln!("Failed to send update to socket: {}", e);
     }
     Ok(())
 }
