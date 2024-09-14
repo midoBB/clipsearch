@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version={{VERSION}}
+Type=Application
+Name=ClipSearch
+Comment=Search and manage clipboard history
+Exec=clipsearch gui
+Icon=clipsearch
+Terminal=false
+Categories=Utility;
