@@ -5,9 +5,11 @@ use std::{
     env,
     io::{self, Read, Write},
     os::unix::net::UnixStream,
-    path::PathBuf,
+    path::PathBuf, sync::Arc,
 };
+use iced::{Application, Settings};
 use uuid::Uuid;
+mod gui;
 
 const MAX_ITEMS: u64 = 750; // TODO: make configurable
 const MAX_DEDUPE_SEARCH: u64 = 100; // TODO: make configurable
@@ -29,6 +31,7 @@ enum Commands {
     Wipe,
     Version,
     List,
+    Gui,
 }
 
 #[derive(Debug)]
@@ -52,8 +55,19 @@ fn main() -> Result<(), anyhow::Error> {
         Some(Commands::List) => handle_list(db_path),
         Some(Commands::Wipe) => handle_wipe(db_path, socket_path),
         Some(Commands::Version) => handle_version(),
+        Some(Commands::Gui) => handle_gui(db_path, socket_path),
         None => print_usage(),
     }?;
+    Ok(())
+}
+
+fn handle_gui(db_path: PathBuf,socket_path: PathBuf) -> Result<(), anyhow::Error> {
+    let db = Arc::new(Database::open(db_path)?);
+    let flags = gui::Flags {
+        db,
+        socket_path,
+    };
+    gui::ClipSearch::run(Settings::with_flags(flags))?;
     Ok(())
 }
 
@@ -81,6 +95,7 @@ fn print_usage() -> Result<(), anyhow::Error> {
     println!("  store           Store clipboard content");
     println!("  list            List clipboard history");
     println!("  wipe            Wipe clipboard history");
+    println!("  gui             Run the GUI to search through clipboard history");
     println!("  version         Print version information");
     println!();
     println!("For more information, use --help with any subcommand.");
